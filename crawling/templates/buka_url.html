@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WMSS - Show Result</title>
+{% load crawling_extras %}
+{% load staticfiles %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/datepicker3.css' %}" rel="stylesheet">
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="{% static 'js/d3.layout.cloud.js' %}"></script>
+<!--Icons-->
+<script src="{% static 'js/lumino.glyphs.js' %}"></script>
+
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html"><span class="glyphicon glyphicon-stats"></span>&nbsp;<span>WM</span>SS</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Profile</a></li>
+							<li><a href="#"><svg class="glyph stroked gear"><use xlink:href="#stroked-gear"></use></svg> Settings</a></li>
+							<li><a href="#"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		
+		<ul class="nav menu">				
+				
+			<li class="list-group-item" style="border:none; color:#30a5ff;"><strong> Crawling</strong></li>
+			
+			<li class="active"><a href="crawling.html"><svg class="glyph stroked camera"><use xlink:href="#stroked-camera"></use></svg>Web Crawling</a></li>
+			<li><a href="crawling.html"><svg class="glyph stroked camera"><use xlink:href="#stroked-camera"></use></svg>Social Media Crawling</a></li>
+			<li role="presentation" class="divider"></li>
+			<li class="list-group-item" style="border:none; color:#30a5ff;"><strong>Preprocessing</strong></li>
+			
+			<li><a href="preprocessing.html"><svg class="glyph stroked hourglass"><use xlink:href="#stroked-hourglass"></use></svg> Stemming</a></li>
+			<li><a href="preprocessing.html"><svg class="glyph stroked hourglass"><use xlink:href="#stroked-hourglass"></use></svg> Stocking</a></li>
+			<li role="presentation" class="divider"></li>
+			<li class="parent">
+				<a href="#">
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Analysis </span>
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> TOTM
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> SVM
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Mind Map Generator
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="login.html"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+		</ul>
+		
+	</div><!--/.sidebar-->
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li><a href="crawling">crawling</a></li>
+				<li class="active">Search Results<li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="jumbotron text-center">
+					<h1> Search Result </h1> 
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div id="word-cloud">
+					
+				</div>
+			</div>
+		</div>
+
+	
+	</div>	<!--/.main-->  
+
+	<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script>
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>	
+</body>
+<script type="text/javascript">
+		function go(){
+			var text = document.getElementById('myTextArea').value;
+			var kata = text.match(/\b(\w+)\b/g);
+			var frequency_list = [];
+			var word_list = [];
+			var maxSize = 0;
+
+			for (i=0; i<kata.length; i++){
+			    if(word_list.indexOf(kata[i]) < 0){
+			        word_list.push(kata[i]);
+			    } else {
+			        break;
+			    }
+			    var size = 0;
+			    for(j=0; j<kata.length; j++){
+			        if(kata[i]==kata[j]){
+			            size +=1;
+			        }
+			        else {
+			            size +=0;
+			        }
+			    }
+
+			    if(size>maxSize){
+			        maxSize=size;
+			    }
+			    frequency_list.push({"text":kata[i], "size":size});
+			}
+
+
+			var color = d3.scale.linear()
+			        .domain([0,1,2,3,4,5,6,10,15,20,100])
+			        .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+			var fontSize = d3.scale.linear()
+			        .domain([1, maxSize])
+			        .range([100, 1000]);
+
+			d3.layout.cloud().size([800, 300])
+			        .words(frequency_list)
+			        .rotate(0)
+			        .fontSize(function(d) { return fontSize(d.size); })
+			        .on("end", draw)
+			        .start();
+
+			function draw(words) {
+			    d3.select("#word-cloud").append("svg")
+			            .attr("width", 850)
+			            .attr("height", 350)
+			            .attr("class", "wordcloud")
+			            .append("g")
+			            // without the transform, words words would get cutoff to the left and top, they would
+			            // appear outside of the SVG area
+			            .attr("transform", "translate(320,200)")
+			            .selectAll("text")
+			            .data(words)
+			            .enter().append("text")
+			            .style("font-size", function(d) { return d.size + "px"; })
+			            .style("fill", function(d, i) { return color(i); })
+			            .attr("transform", function(d) {
+			                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+			            })
+			            .text(function(d) { return d.text; });
+			}
+		}
+	</script>
+
+</html>

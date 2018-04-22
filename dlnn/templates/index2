@@ -1,0 +1,16 @@
+<h2>SENTIMENT ANALYSI PREDICTION</h2>
+<form method ="POST">{% csrf_token %}
+<h4>Algorithm: Deep Learning Neural Network</h4>
+<h4>Feature Extraction:</h4>
+<select name="FE">
+{% for a in data %}
+	<option value ={{a}}> {{a}}</option>
+{% endfor %}
+</select>
+<h4>Type Your Testing Sentiment:</h4>
+<textarea name="inputArea" rows='6' cols='40'>
+</textarea>
+<input type="submit" value="Predict" name='input'>
+</form>
+
+<h3><em>{{sent}}</em></h3>

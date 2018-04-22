@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %} WMSS - Data Management {% endblock %}
+
+{% load staticfiles %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script src={% static 'js/bootstrap-table.js' %}></script>
+<style type="text/css">
+	.table th {
+		text-align: center;
+	}
+</style>
+{% endblock %}
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+
+	{% block content %}
+		<div class="row">
+			<div class="col-sm-12">
+			<ol class="breadcrumb">
+				<li><a href=""><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li class="active">Data Management</li>
+			</ol>
+			</div>
+		</div>
+
+	  <div class="row">
+	        <div class="col-sm-12">
+	        <div class="alert alert-info">
+	        <h1 class="page-header">
+	            <strong>Data Management</strong>
+	        </h1>
+	        </div>
+	        </div>
+	    </div>
+
+		<div class="row">
+		<div class="col-md-12">
+		<h3>Daftar Berita :</h3>		 	
+		 	<form role="form" method="POST">
+		 	{% csrf_token %}
+		 	<table id="table" data-toolbar="#toolbar" data-toggle="table" data-url='test_1'  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-pagination="true" data-sort-name="id" data-click-to-select="true" data-striped="true">
+		    <thead>
+		    <tr>
+		        <th data-field="id1" data-sortable="true"><strong> id</strong></th>
+		        <th data-field="judul_berita" data-sortable="true"><strong>Judul Berita</strong></th>
+		        <th data-field="konten_berita" data-sortable="true"><strong>Konten Berita</strong></th>
+		        <th data-field="id"><input type="checkbox" id="checkAll"></th>
+		    </tr>
+		    </thead>
+		    <tbody>
+		    	{% for post in list1 %}
+					<tr>
+						<td>{{post.id_berita}}</td>
+						<td>{{post.judul_berita}}</td>
+						<td>{{post.konten_berita}}</td>						
+						<td><input type="checkbox" value={{post.id_berita}} class="checkItem"name="check"></td>
+					</tr>
+				{% endfor %}
+		    </tbody>
+		</table>
+		 	<br>
+		 	<br>
+		 	<div class="panel-group">
+		 	<div class="panel panel-primary">
+		 	  	<div class="panel-heading"> Manage Data </div>
+  					<div class="panel-body">
+  						<input type="submit" class="btn btn-primary" value="csv" name="_export">
+						<button type="submit" class="btn btn-danger" name="delete">Hapus Data </button><br><br>	
+  					</div>
+  			</div>
+			<div class="panel panel-primary">
+  				<div class="panel-heading"> Pilih Analisis </div>
+  				<div class="panel-body">
+  					<button type="submit" class="btn btn-primary" name="mind_map">Mind map</button>
+					<button type="submit" class="btn btn-primary" name="preprocess">Preprocess</button>
+					<button type="submit" class="btn btn-primary" name="summarizer">Summarizer</button>
+					<button type="submit" class="btn btn-primary" name="word_cloud">Word Cloud</button>
+  				</div>					
+			</div>
+			</div>
+			</form>
+		</div>
+		</div><!--/.row-->
+		
+		{% endblock %}
+
+	{% block js %}
+	var sidebar = document.getElementById('data_management');
+	sidebar.setAttribute('class', 'active');
+
+	$(document).ready(function(){
+	    ajaxGet();
+	});
+
+	function ajaxGet(){
+	var table_params = $('#table').bootstrapTable({
+        url: 'test_1',
+        queryParams: function (p) {
+            return {
+                limit: p.limit,
+                offset: p.offset,
+                sort: p.sort,
+                order: p.order,
+                'data[]': [selected_data],//for multi-select filter
+
+            };
+        }
+    });
+    $('#table').bootstrapTable('refresh');
+	}
+
+
+	 $(document).on('click','#checkAll',function () {
+     $('.checkItem').not(this).prop('checked', this.checked);
+ });
+
+	
+	{% endblock %}

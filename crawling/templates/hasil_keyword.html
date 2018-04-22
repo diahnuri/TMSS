@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %} WMSS - Crawling Result {% endblock %}
+{% load staticfiles %}
+{% block css %}
+<style type="text/css">
+	.dropdown-analisis{
+		cursor: pointer;
+	}
+</style>
+{% endblock %}
+
+	{% block content %}
+	
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li><a href="/crawling/">crawling</a></li>
+				<li class="active">Search Results<li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+				<div class="jumbotron text-center">
+					<h1> Crawling Result </h1>
+				</div>
+		</div>
+				
+		<div class="well" style="text-align: justify;">	
+			{% for row in list_news %}
+			<h4>Judul Berita :</h4>
+			{{ row.judul_berita }}
+			<h4>Konten Berita :</h4>
+			{{ row.konten_berita }}<br>
+			<hr>
+			{% endfor %}
+		</div>
+		<form role="form" action="/crawling/save_crawling/" enctype="multipart/form-data" method="POST" id="save-form">
+		{% csrf_token %}
+
+		<button class="btn btn-primary" type="submit" name="save_crawl"> Simpan Berita </button>			
+		</form>
+		<br>
+		<div class="dropdown">
+			<label>
+				Atau Lanjut ke Analisis :
+			</label>
+			<br>
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Pilih Analisis
+				<span class="caret"></span>
+			</button>
+				<ul class="dropdown-menu">
+					<li class="dropdown-analisis"><a onclick="preprocess()">Preprocess</a></li>
+					<li class="dropdown-analisis"><a onclick="mindmap()">Mind Map Generator</a></li>	
+					<li class="dropdown-analisis"><a href="#">Deep Learning Neural Network</a></li>	
+					<li class="dropdown-analisis"><a href="#">Joint Sentiment Topic</a></li>	
+					<li class="dropdown-analisis"><a onclick="summarizer()">Text Summarizer</a></li>		     
+				</ul>
+		</div>
+
+		<form action="/crawling/pilih_analisis/" enctype="multipart/form-data" method="POST" id="pilih-analisis">
+		{% csrf_token %}
+			
+		</form>
+		<br>
+		{% endblock %}
+	
+	{% block js %}
+		var sidebar = document.getElementById('crawling');
+		sidebar.setAttribute('class', 'active');
+
+		var dump = {{dump|safe}};
+		$('#save-form').submit(function(){
+			var hidden = $("<input type='hidden' name='crawling-data'/>");
+		    hidden.val(JSON.stringify(dump));
+		    $('#save-form').append(hidden);
+		    return true;
+		});
+
+
+	function mindmap(){
+			var form = $('#pilih-analisis');
+			var hidden = $("<input type='hidden' name='list-data-mindmap'/>");
+		    hidden.val(JSON.stringify(dump));
+		    form.append(hidden);
+		    form.submit();
+		}
+
+		function preprocess(){
+			var form = $('#pilih-analisis');
+			var hidden = $("<input type='hidden' name='list-data-preprocess'/>");
+		    hidden.val(JSON.stringify(dump));
+		    form.append(hidden);
+		    form.submit();
+		}
+
+		function summarizer(){
+			var form = $('#pilih-analisis');
+			var hidden = $("<input type='hidden' name='list-data-summarizer'/>");
+		    hidden.val(JSON.stringify(dump));
+		    form.append(hidden);
+		    form.submit();
+		}
+
+	{% endblock %}

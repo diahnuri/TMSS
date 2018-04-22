@@ -1,0 +1,21 @@
+<title>
+	dlnn | database
+</title>
+<head>
+	<h2>DataBase</h2>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>Dataset</th>
+			<th>Label</th>
+		</tr>
+		{% for a in data %}
+		<tr>
+			<td>{{a.topik}}</td>
+			<td>{{a.tweet}}</td>
+			<td>{{a.label}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>

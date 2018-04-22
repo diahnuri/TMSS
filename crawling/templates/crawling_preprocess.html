@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %} WMSS - Preprocess {% endblock %}
+{% load staticfiles %}
+			
+	{% block content %}
+		<div class="row">
+		{% for row in list_news1 %}
+		<form action="/preprocess/" enctype="multipart/form-data" method="POST">
+		{% csrf_token %}
+		<input type="hidden" value="{{row.id_berita}}" name="id_berita">
+		<input type="hidden" value="{{row.judul_berita}}" name="judul_berita">
+		<input type="hidden" value="{{row.konten_berita}}" name="konten_berita">
+		<h6>Judul Berita :</h6>
+		{{ row.judul_berita }}
+		<h6>Konten Berita :</h6>
+		{{ row.konten_berita }}<br>	
+		<button type="submit" class="btn btn-primary" id="button_preprocess" name="prepros">lihat preprocess</button>
+		</form>
+		<hr>
+		{% endfor %}
+		</div><!--/.row-->		
+		{% endblock %}
+
+	{% block js %}
+$(document).ready(function(){
+		$('.btn-primary').click(function(){
+			$.blockUI({ 
+				message: '<img src="http://nahars.com/wp-content/uploads/2016/10/blue-circles-loading-animation-large.gif" />',
+    			css: {
+        			border:     'none',
+        			backgroundColor:'transparent'
+    				}
+						});
+ 
+       		setTimeout($.unblockUI, 600000);
+		});
+	});	
+
+	var sidebar = document.getElementById('preprocess');
+	sidebar.setAttribute('class', 'active');
+	{% endblock %}

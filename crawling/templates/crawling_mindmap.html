@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %} WMSS - Word Summary {% endblock %}
+{% load staticfiles %}
+{% block css %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/datepicker3.css' %}" rel="stylesheet">
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+<!--Icons-->
+<script src="{% static 'js/lumino.glyphs.js' %}"></script>
+
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+{% endblock %}
+
+	{% block content %}
+		<div class="row">
+		{% for row in list_news1 %}
+		<div class="well" style="text-align: justify;">
+		<form action="/mindmap/process/" enctype="multipart/form-data" method="POST">
+		{% csrf_token %}
+		<input type="hidden" value="{{row.judul_berita}}" name="judul_berita">
+		<input type="hidden" value="{{row.konten_berita}}" name="konten_berita">
+		<h4>Judul Berita :</h4>
+		{{ row.judul_berita }}
+		<h4>Konten Berita :</h4>
+		{{ row.konten_berita }}<br><br>
+		<button type="submit" class="btn btn-primary mindmap" id="button_mindmap">Tampilkan Mind Map</button>
+		</form>
+		<hr>
+		</div>
+		{% endfor %}
+		</div><!--/.row-->		
+	{% endblock %}
+	
+	
+		{% block js %}
+	$(document).ready(function(){
+		$('.mindmap').click(function(){
+			$.blockUI({ 
+				message: '<img src="http://nahars.com/wp-content/uploads/2016/10/blue-circles-loading-animation-large.gif" />',
+    			css: {
+        			border:     'none',
+        			backgroundColor:'transparent'
+    				}
+						});
+ 
+       		setTimeout($.unblockUI, 600000);
+		});
+	});	
+		var sidebar = document.getElementById('mindmap');
+	sidebar.setAttribute('class', 'active');
+		
+		{% endblock %}

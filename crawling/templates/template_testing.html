@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WMSS - Word Summary</title>
+{% extends 'base.html' %}
+{% load staticfiles %}
+</head>
+
+<body>		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+{% block content %}
+{% endblock %}
+		
+	</div>	<!--/.main-->
+	  
+
+	<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/chart-data.js"></script>
+	<script src="js/easypiechart.js"></script>
+	<script src="js/easypiechart-data.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script>
+	{% block js %}
+	var sidebar = document.getElementById('crawling');
+	sidebar.setAttribute('class', 'active');
+	{% endblock %}
+
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		});
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		});
+
+		$(document).ready(function() {
+	    	$('#example').dataTable({
+	    		data:[],
+	    		columns: [
+	    			{data: 'Judul_berita'},
+	    			{data: 'konten_berita'}
+	    		]
+	    		});
+	    	});
+	
+
+	</script>	
+</body>
+
+</html>
