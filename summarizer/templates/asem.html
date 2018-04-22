@@ -1,0 +1,10 @@
+<form role="form" action="anjiang" method="POST">
+{% csrf_token %}
+<h6>Judul Berita</h6>
+{{form_input_berita.judul_berita}}
+<h6>Konten Berita</h6>
+{{form_input_berita.konten_berita}}
+<h6>Rasio</h6>
+
+<button type="submit" class="btn btn-primary" name="button_simpan">Go</button><br>
+</form>

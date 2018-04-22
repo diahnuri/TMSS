@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+hasil summary berita
+{% endblock title %}
+
+{% block content %}
+<div class="row"> 
+    {% comment %} kosong {% endcomment %}
+</div>
+<div class="row">
+    <div class="col-sm-2 col-sm-offset-2 col-lg-10 col-lg-offset-2 main">
+        <div class="" style="background-color: white ; width: 85%">
+            <h2 style="padding: 40px">
+                Hasil Peringkasan
+            </h2>
+            <div class="col-sm-offset-1" style="padding: 40px">  
+                Waktu Peringkasan : {{hasil.waktu}} <br> <br>
+                <h4>Ringkasan Berita dengan Judul <br>
+                </h4>
+                <h3 style="font-family: Droid Serif">
+                    {{hasil.berita.judul}}
+                </h3> <br>
+                <p>klik tulisan dibawah untuk melihat isinya</p>
+                <br>
+                
+                {% comment %} collapsible summary {% endcomment %}
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#summary">Hasil Peringkasan dengan Rasio Ringkasan {{hasil.rasio}}% </a>
+                                </h4>
+                            </div>
+                            <div id="summary" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <p>
+                                    {% for kalimat in hasil.summary %}
+                                    {{kalimat}}
+                                    {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% comment %} end of collapsible summary {% endcomment %}
+                
+                 {% comment %} collapsible asli {% endcomment %}
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#asli"> Teks Input Berita </a>
+                            </h4>
+                        </div>
+                        <div id="asli" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>
+                                     {{hasil.berita.konten}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} end of collapsible asli {% endcomment %}
+
+
+                {% comment %} collapsible verbose {% endcomment %}
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#verbose"> Nilai-nilai yang Membuat Ringkasan Tersebut </a>
+                                </h4>
+                            </div>
+                            <div id="verbose" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    {% for kalimat, skor in hasil.berita.compiled_scores %}
+                                    {{kalimat}} <br> 
+                                    dengan skor : {{skor}} 
+                                    <br><br> 
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% comment %} end of collapsible verbose {% endcomment %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+
+{% endblock js %}

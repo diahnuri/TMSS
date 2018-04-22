@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}
+WMSS-Summarizer
+{% endblock %}
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+{% block content %}
+	<div class="row">	</div>
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+			<h2>Input Berita</h2>
+			<form role="form" action="summarized" method="POST">
+				{% csrf_token %}
+				<h4>Judul Berita</h4>
+				{{form_input_berita.judul_berita}}
+				<h4>Konten Berita</h4>
+				{{form_input_berita.konten_berita}}
+				<h4>Rasio</h4>
+				<input type="text" name="rasio"></input>
+				<button type="submit" class="btn btn-primary" name="button_simpan">Go</button><br>
+			</form>
+
+			<div class="row">
+				{% comment %} kosong {% endcomment %}
+			</div>
+					<div class="" style="background-color: white ; width: 85%">
+						<h2 style="padding: 40px">
+							Hasil Peringkasan
+						</h2>
+						<div class="col-sm-offset-1" style="padding: 40px">
+							Waktu Peringkasan : {{hasil.waktu}} <br> <br>
+							<h4>Ringkasan Berita dengan Judul <br>
+							</h4>
+							<h3 style="font-family: Droid Serif">
+							{{hasil.berita.judul}}
+							</h3> <br>
+							<p>klik tulisan dibawah untuk melihat isinya</p>
+							<br>
+							{% comment %} collapsible summary {% endcomment %}
+							<div class="panel-group">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" href="#summary">Hasil Peringkasan dengan Rasio Ringkasan {{hasil.rasio}}% </a>
+										</h4>
+									</div>
+									<div id="summary" class="panel-collapse collapse">
+										<div class="panel-body">
+											<p>
+												{% for kalimat in hasil.summary %} {{kalimat}} {% endfor %}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% comment %} end of collapsible summary {% endcomment %} {% comment %} collapsible asli {% endcomment %}
+							<div class="panel-group">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" href="#asli"> Teks Input Berita </a>
+										</h4>
+									</div>
+									<div id="asli" class="panel-collapse collapse">
+										<div class="panel-body">
+											<p>
+												{{hasil.berita.konten}}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% comment %} end of collapsible asli {% endcomment %} {% comment %} collapsible verbose {% endcomment %}
+							<div class="panel-group">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" href="#verbose"> Nilai-nilai yang Membuat Ringkasan Tersebut </a>
+										</h4>
+									</div>
+									<div id="verbose" class="panel-collapse collapse">
+										<div class="panel-body">
+											{% for kalimat, skor in hasil.berita.compiled_scores %} {{kalimat}} <br> dengan skor : {{skor}}
+											<br><br> {% endfor %}
+										</div>
+									</div>
+								</div>
+							</div>
+							{% comment %} end of collapsible verbose {% endcomment %}
+
+						</div>
+					</div>
+				</div>
+			</div>
+			{% comment %} <div>
+				<h3>Hasil Ringkasan dengan Rasio {{hasil.rasio}}%</h3>
+				runtime : {{hasil.waktu}}<br>
+				------------------------------------------------------------------------
+				<h4>Summary</h4>
+				{% for kalimat in hasil.summary %}
+					{{kalimat}}
+				{% endfor %}
+				<br>
+				------------------------------------------------------------------------- <br>
+				<h4>Teks input</h4> <br>
+				{{hasil.berita.konten}}
+				<br>------------------------------------------------------------------------- <br>
+				<h4>Scores</h4> <br>
+				{% for kalimat, skor in hasil.berita.compiled_scores %}
+					{{kalimat}} <br>
+					dengan skor : {{skor}} <br><br>
+				{% endfor %}
+				</div>
+			</div><!--/.row-->
+			</div>	<!--/.main--> {% endcomment %}
+{% endblock %}
+{% block js %}
+	var sidebar = document.getElementById('analysis');
+	sidebar.setAttribute('class', 'active');
+{% endblock %}
