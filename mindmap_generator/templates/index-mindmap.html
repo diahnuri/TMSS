@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}WMSS - Mindmap Generator{% endblock %}
+
+{% block content %}
+<br>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-9">
+				<a href="/crawling/" class="btn btn-primary form-control">Mulai Crawling</a>
+		</div>
+	</div>
+	<div class="row">
+			<br>
+		<div class="col-sm-9" style="text-align: center">
+				---- atau Input Manual ----
+		</div>
+		<br>
+	</div>
+	<div class="row">
+		<div class="col-lg-9">
+			<form class="form" action="/mindmap/process/" method="POST">
+				{% csrf_token %}
+				<div class="form-group">
+					<label>Judul Berita</label>
+					<input class="form-control" name="judul_berita" type="text" required>
+				</div>
+				<div class="form-group">
+					<label>Konten Berita</label>
+					<textarea class="form-control" cols="40" name="konten_berita" rows="10" required></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary" name="button_simpan">Proses</button><br>
+			</form>
+		</div>
+	</div>
+</div><!--/.row-->
+{% endblock %}
